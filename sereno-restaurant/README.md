@@ -1,3 +1,4 @@
+README.md = (made with help of AI)
 # Sereno — Restaurant Website (Full Stack)
 
 A complete restaurant website: a Node.js/Express REST API backend and a vanilla HTML/CSS/JS frontend. No database setup required — data is stored in JSON files on disk, so it's easy to run locally and easy to swap for a real database later.
