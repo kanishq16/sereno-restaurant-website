@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reservations — Sereno</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a href="index.html" class="brand">Ser<em>eno</em></a>
+    <nav>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="menu.html">Menu</a></li>
+        <li><a href="reservations.html" class="active">Reservations</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+    <a href="reservations.html" class="btn btn-dark">Book a table</a>
+  </div>
+</header>
+
+<section style="padding-top:60px;">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Reserve a table</h2>
+      <span class="note">twenty-eight seats</span>
+    </div>
+    <p>Fill in your details below and we'll confirm by email or phone within one business day. For parties over twelve, please call us directly.</p>
+
+    <form id="reservation-form" class="form-card" novalidate>
+      <div class="form-row">
+        <div class="field">
+          <label for="name">Full name</label>
+          <input type="text" id="name" name="name" required>
+        </div>
+        <div class="field">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" required>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="field">
+          <label for="phone">Phone (optional)</label>
+          <input type="tel" id="phone" name="phone">
+        </div>
+        <div class="field">
+          <label for="partySize">Party size</label>
+          <input type="number" id="partySize" name="partySize" min="1" max="20" value="2" required>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="field">
+          <label for="date">Date</label>
+          <input type="date" id="date" name="date" required>
+        </div>
+        <div class="field">
+          <label for="time">Time</label>
+          <input type="time" id="time" name="time" required>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="notes">Notes (allergies, occasions, seating preference)</label>
+        <textarea id="notes" name="notes"></textarea>
+      </div>
+
+      <button type="submit" class="btn btn-primary">Request reservation</button>
+      <div id="form-msg" class="form-msg"></div>
+    </form>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <h4>SERENO</h4>
+        <p>214 Fig Street, North End<br>A neighbourhood trattoria, open since 2018.</p>
+      </div>
+      <div>
+        <h4>Hours</h4>
+        <p>Tue – Sun: 5:00pm – 11:00pm</p>
+        <p>Closed Mondays</p>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <a href="tel:+15550123456">(555) 012-3456</a>
+        <a href="mailto:hello@sereno-trattoria.com">hello@sereno-trattoria.com</a>
+      </div>
+    </div>
+    <div class="footer-bottom">&copy; 2026 Sereno Trattoria. All rights reserved.</div>
+  </div>
+</footer>
+
+<script src="js/api.js"></script>
+<script>
+  const form = document.getElementById("reservation-form");
+  const msg = document.getElementById("form-msg");
+
+  // Prevent picking a date in the past
+  document.getElementById("date").min = new Date().toISOString().split("T")[0];
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    msg.className = "form-msg";
+    msg.textContent = "";
+
+    const payload = {
+      name: form.name.value.trim(),
+      email: form.email.value.trim(),
+      phone: form.phone.value.trim(),
+      date: form.date.value,
+      time: form.time.value,
+      partySize: form.partySize.value,
+      notes: form.notes.value.trim()
+    };
+
+    try {
+      const res = await apiRequest("/reservations", {
+        method: "POST",
+        body: JSON.stringify(payload)
+      });
+      msg.className = "form-msg success";
+      msg.textContent = `Thanks, ${payload.name.split(" ")[0]} — your request for ${payload.partySize} on ${payload.date} at ${payload.time} has been received. We'll confirm shortly.`;
+      form.reset();
+    } catch (err) {
+      msg.className = "form-msg error";
+      msg.textContent = err.message;
+    }
+  });
+</script>
+
+</body>
+</html>

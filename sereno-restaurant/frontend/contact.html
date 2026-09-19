@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact — Sereno</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a href="index.html" class="brand">Ser<em>eno</em></a>
+    <nav>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="menu.html">Menu</a></li>
+        <li><a href="reservations.html">Reservations</a></li>
+        <li><a href="contact.html" class="active">Contact</a></li>
+      </ul>
+    </nav>
+    <a href="reservations.html" class="btn btn-dark">Book a table</a>
+  </div>
+</header>
+
+<section style="padding-top:60px;">
+  <div class="wrap" style="display:grid; grid-template-columns: 1fr 1fr; gap:60px;">
+    <div>
+      <div class="section-head" style="border-bottom:none; padding-bottom:0;">
+        <h2>Get in touch</h2>
+      </div>
+      <p>Questions about private events, large parties, or anything else — send a note and we'll reply within a day.</p>
+
+      <form id="contact-form" class="form-card" style="max-width:none;" novalidate>
+        <div class="form-row">
+          <div class="field">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" required>
+          </div>
+          <div class="field">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="subject">Subject</label>
+          <input type="text" id="subject" name="subject" placeholder="Private event, press, feedback…">
+        </div>
+
+        <div class="field">
+          <label for="message">Message</label>
+          <textarea id="message" name="message" required></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Send message</button>
+        <div id="form-msg" class="form-msg"></div>
+      </form>
+    </div>
+
+    <div class="hero-details" style="border-left: 1px solid var(--line); padding-left: 40px; color: var(--charcoal);">
+      <dl>
+        <dt style="color:#8a8a80;">Address</dt>
+        <dd style="color:var(--ink);">214 Fig Street, North End</dd>
+        <dt style="color:#8a8a80;">Phone</dt>
+        <dd style="color:var(--ink);"><a href="tel:+15550123456">(555) 012-3456</a></dd>
+        <dt style="color:#8a8a80;">Email</dt>
+        <dd style="color:var(--ink);"><a href="mailto:hello@sereno-trattoria.com">hello@sereno-trattoria.com</a></dd>
+        <dt style="color:#8a8a80;">Hours</dt>
+        <dd style="color:var(--ink);">Tue – Sun, 5:00pm – 11:00pm<br>Closed Mondays</dd>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <h4>SERENO</h4>
+        <p>214 Fig Street, North End<br>A neighbourhood trattoria, open since 2018.</p>
+      </div>
+      <div>
+        <h4>Hours</h4>
+        <p>Tue – Sun: 5:00pm – 11:00pm</p>
+        <p>Closed Mondays</p>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <a href="tel:+15550123456">(555) 012-3456</a>
+        <a href="mailto:hello@sereno-trattoria.com">hello@sereno-trattoria.com</a>
+      </div>
+    </div>
+    <div class="footer-bottom">&copy; 2026 Sereno Trattoria. All rights reserved.</div>
+  </div>
+</footer>
+
+<script src="js/api.js"></script>
+<script>
+  const form = document.getElementById("contact-form");
+  const msg = document.getElementById("form-msg");
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    msg.className = "form-msg";
+
+    const payload = {
+      name: form.name.value.trim(),
+      email: form.email.value.trim(),
+      subject: form.subject.value.trim(),
+      message: form.message.value.trim()
+    };
+
+    try {
+      const res = await apiRequest("/contact", {
+        method: "POST",
+        body: JSON.stringify(payload)
+      });
+      msg.className = "form-msg success";
+      msg.textContent = res.message || "Message sent. We'll be in touch soon.";
+      form.reset();
+    } catch (err) {
+      msg.className = "form-msg error";
+      msg.textContent = err.message;
+    }
+  });
+</script>
+
+</body>
+</html>

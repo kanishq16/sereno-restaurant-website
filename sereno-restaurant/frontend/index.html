@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sereno — Trattoria in the North End</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a href="index.html" class="brand">Ser<em>eno</em></a>
+    <nav>
+      <ul class="nav-links">
+        <li><a href="index.html" class="active">Home</a></li>
+        <li><a href="menu.html">Menu</a></li>
+        <li><a href="reservations.html">Reservations</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+    <a href="reservations.html" class="btn btn-dark">Book a table</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <div>
+      <p class="hero-eyebrow-note">Open Tuesday through Sunday, 5pm till late</p>
+      <h1>Slow food, <em>unhurried</em> evenings.</h1>
+      <p class="hero-sub">Sereno is a small trattoria built around wood-fired mains, hand-rolled pasta, and a wine list chosen one bottle at a time. Twenty-eight seats. No rush.</p>
+      <div style="margin-top: 32px; display: flex; gap: 16px;">
+        <a href="reservations.html" class="btn btn-primary">Reserve a table</a>
+        <a href="menu.html" class="btn btn-outline">View the menu</a>
+      </div>
+    </div>
+    <div class="hero-details">
+      <dl>
+        <dt>Address</dt>
+        <dd>214 Fig Street, North End</dd>
+        <dt>Hours</dt>
+        <dd>Tue–Sun, 5:00pm – 11:00pm</dd>
+        <dt>Reservations</dt>
+        <dd>Recommended, especially weekends</dd>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <h2>From the kitchen tonight</h2>
+      <span class="note">a short taste</span>
+    </div>
+    <div id="preview-menu" class="menu-grid">
+      <p>Loading tonight's dishes…</p>
+    </div>
+  </div>
+</section>
+
+<section class="about">
+  <div class="wrap">
+    <div class="about-photo"></div>
+    <div>
+      <div class="section-head" style="border-bottom:none; margin-bottom:20px; padding-bottom:0;">
+        <h2>A kitchen with one rule</h2>
+      </div>
+      <p>Everything on the menu is made from scratch, every day — the pasta rolled by hand each morning, the ragu started before the doors open, the bread proofed overnight. We keep the list short so nothing sits.</p>
+      <p>Chef Marco Belline trained in Bologna and Florence before opening Sereno in 2018 with a simple aim: cook the way his grandmother did, for people who have time to sit and eat it properly.</p>
+      <a href="contact.html" class="btn btn-dark">Get in touch</a>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <h4>SERENO</h4>
+        <p>214 Fig Street, North End<br>A neighbourhood trattoria, open since 2018.</p>
+      </div>
+      <div>
+        <h4>Hours</h4>
+        <p>Tue – Sun: 5:00pm – 11:00pm</p>
+        <p>Closed Mondays</p>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <a href="tel:+15550123456">(555) 012-3456</a>
+        <a href="mailto:hello@sereno-trattoria.com">hello@sereno-trattoria.com</a>
+      </div>
+    </div>
+    <div class="footer-bottom">&copy; 2026 Sereno Trattoria. All rights reserved.</div>
+  </div>
+</footer>
+
+<script src="js/api.js"></script>
+<script>
+  (async function loadPreview() {
+    const el = document.getElementById("preview-menu");
+    try {
+      const menu = await apiRequest("/menu");
+      const picks = menu.filter(item => ["Pasta", "Mains"].includes(item.category)).slice(0, 4);
+      el.innerHTML = picks.map(item => `
+        <div class="menu-item" style="border-bottom:1px dashed var(--line);">
+          <div>
+            <div class="menu-item-name">${item.name}</div>
+            <p class="menu-item-desc">${item.description}</p>
+          </div>
+          <div class="menu-item-price">$${item.price}</div>
+        </div>
+      `).join("");
+    } catch (err) {
+      el.innerHTML = `<p>Couldn't load the menu right now. Make sure the backend server is running.</p>`;
+    }
+  })();
+</script>
+
+</body>
+</html>

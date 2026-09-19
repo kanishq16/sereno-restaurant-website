@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — Sereno</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a href="index.html" class="brand">Ser<em>eno</em></a>
+    <nav>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="menu.html">Menu</a></li>
+        <li><a href="admin.html" class="active">Admin</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<section style="padding-top:50px;">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Reservations</h2>
+      <span class="note">internal view</span>
+    </div>
+    <div style="overflow-x:auto;">
+      <table class="admin-table" id="reservations-table">
+        <thead>
+          <tr>
+            <th>Name</th><th>Date</th><th>Time</th><th>Party</th><th>Contact</th><th>Status</th><th>Actions</th>
+          </tr>
+        </thead>
+        <tbody><tr><td colspan="7">Loading…</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:20px;">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Contact messages</h2>
+      <span class="note">internal view</span>
+    </div>
+    <div style="overflow-x:auto;">
+      <table class="admin-table" id="messages-table">
+        <thead>
+          <tr><th>Name</th><th>Email</th><th>Subject</th><th>Message</th><th>Received</th></tr>
+        </thead>
+        <tbody><tr><td colspan="5">Loading…</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-bottom">&copy; 2026 Sereno Trattoria — internal admin view.</div>
+  </div>
+</footer>
+
+<script src="js/api.js"></script>
+<script>
+  async function loadReservations() {
+    const tbody = document.querySelector("#reservations-table tbody");
+    try {
+      const reservations = await apiRequest("/reservations");
+      if (reservations.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7">No reservations yet.</td></tr>`;
+        return;
+      }
+      tbody.innerHTML = reservations.map(r => `
+        <tr data-id="${r.id}">
+          <td>${r.name}${r.notes ? `<br><span style="color:#8a8a80; font-size:0.8rem;">${r.notes}</span>` : ""}</td>
+          <td>${r.date}</td>
+          <td>${r.time}</td>
+          <td>${r.partySize}</td>
+          <td>${r.email}${r.phone ? `<br>${r.phone}` : ""}</td>
+          <td><span class="status-pill status-${r.status}">${r.status}</span></td>
+          <td class="admin-actions">
+            <button data-action="confirmed">Confirm</button>
+            <button data-action="cancelled">Cancel</button>
+          </td>
+        </tr>
+      `).join("");
+    } catch (err) {
+      tbody.innerHTML = `<tr><td colspan="7">Couldn't load reservations. Is the backend running?</td></tr>`;
+    }
+  }
+
+  async function loadMessages() {
+    const tbody = document.querySelector("#messages-table tbody");
+    try {
+      const messages = await apiRequest("/contact");
+      if (messages.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5">No messages yet.</td></tr>`;
+        return;
+      }
+      tbody.innerHTML = messages.map(m => `
+        <tr>
+          <td>${m.name}</td>
+          <td>${m.email}</td>
+          <td>${m.subject}</td>
+          <td>${m.message}</td>
+          <td>${new Date(m.createdAt).toLocaleString()}</td>
+        </tr>
+      `).join("");
+    } catch (err) {
+      tbody.innerHTML = `<tr><td colspan="5">Couldn't load messages. Is the backend running?</td></tr>`;
+    }
+  }
+
+  document.querySelector("#reservations-table tbody").addEventListener("click", async (e) => {
+    const btn = e.target.closest("button[data-action]");
+    if (!btn) return;
+    const row = btn.closest("tr");
+    const id = row.dataset.id;
+    try {
+      await apiRequest(`/reservations/${id}`, {
+        method: "PATCH",
+        body: JSON.stringify({ status: btn.dataset.action })
+      });
+      loadReservations();
+    } catch (err) {
+      alert(err.message);
+    }
+  });
+
+  loadReservations();
+  loadMessages();
+</script>
+
+</body>
+</html>

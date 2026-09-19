@@ -1,0 +1,14 @@
+[
+  { "id": 1, "category": "Starters", "name": "Burrata al Forno", "description": "Warm burrata, blistered cherry tomatoes, basil oil, grilled sourdough", "price": 14, "tags": ["vegetarian"] },
+  { "id": 2, "category": "Starters", "name": "Tuna Crudo", "description": "Yellowfin tuna, blood orange, fennel, chili oil", "price": 16, "tags": ["gluten-free"] },
+  { "id": 3, "category": "Starters", "name": "Arancini di Zafferano", "description": "Saffron risotto balls, taleggio center, saffron aioli", "price": 12, "tags": ["vegetarian"] },
+  { "id": 4, "category": "Pasta", "name": "Tagliatelle al Ragu", "description": "Slow-braised beef and pork ragu, twelve-hour reduction, parmigiano", "price": 22, "tags": [] },
+  { "id": 5, "category": "Pasta", "name": "Cacio e Pepe", "description": "Tonnarelli, pecorino romano, cracked black pepper", "price": 18, "tags": ["vegetarian"] },
+  { "id": 6, "category": "Pasta", "name": "Pappardelle al Cinghiale", "description": "Wild boar ragu, juniper, rosemary, pappardelle", "price": 24, "tags": [] },
+  { "id": 7, "category": "Mains", "name": "Branzino al Sale", "description": "Salt-crusted whole branzino, lemon, wild herbs, olive oil", "price": 34, "tags": ["gluten-free"] },
+  { "id": 8, "category": "Mains", "name": "Bistecca alla Fiorentina", "description": "Dry-aged porterhouse, rosemary, sea salt, salsa verde (for two)", "price": 68, "tags": ["gluten-free"] },
+  { "id": 9, "category": "Mains", "name": "Osso Buco", "description": "Braised veal shank, saffron risotto milanese, gremolata", "price": 36, "tags": [] },
+  { "id": 10, "category": "Dolci", "name": "Tiramisu della Casa", "description": "Espresso-soaked savoiardi, mascarpone, cocoa", "price": 10, "tags": ["vegetarian"] },
+  { "id": 11, "category": "Dolci", "name": "Panna Cotta", "description": "Vanilla bean panna cotta, roasted fig compote", "price": 9, "tags": ["vegetarian", "gluten-free"] },
+  { "id": 12, "category": "Dolci", "name": "Affogato", "description": "Vanilla gelato drowned in hot espresso, amaretti crumble", "price": 8, "tags": ["vegetarian"] }
+]

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Menu — Sereno</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a href="index.html" class="brand">Ser<em>eno</em></a>
+    <nav>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="menu.html" class="active">Menu</a></li>
+        <li><a href="reservations.html">Reservations</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+    <a href="reservations.html" class="btn btn-dark">Book a table</a>
+  </div>
+</header>
+
+<section style="padding-top:60px; padding-bottom: 20px;">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>The menu</h2>
+      <span class="note">changes with the season</span>
+    </div>
+    <p>Prices in USD. Flag any allergy for our kitchen &mdash; most dishes can be adapted.</p>
+  </div>
+</section>
+
+<section style="padding-top:0;">
+  <div class="wrap">
+    <div id="full-menu">
+      <p>Loading menu…</p>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <h4>SERENO</h4>
+        <p>214 Fig Street, North End<br>A neighbourhood trattoria, open since 2018.</p>
+      </div>
+      <div>
+        <h4>Hours</h4>
+        <p>Tue – Sun: 5:00pm – 11:00pm</p>
+        <p>Closed Mondays</p>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <a href="tel:+15550123456">(555) 012-3456</a>
+        <a href="mailto:hello@sereno-trattoria.com">hello@sereno-trattoria.com</a>
+      </div>
+    </div>
+    <div class="footer-bottom">&copy; 2026 Sereno Trattoria. All rights reserved.</div>
+  </div>
+</footer>
+
+<script src="js/api.js"></script>
+<script>
+  (async function loadMenu() {
+    const el = document.getElementById("full-menu");
+    try {
+      const menu = await apiRequest("/menu");
+      const categories = [...new Set(menu.map(i => i.category))];
+
+      el.innerHTML = categories.map(cat => {
+        const items = menu.filter(i => i.category === cat);
+        return `
+          <div class="menu-category">
+            <h3>${cat}</h3>
+            ${items.map(item => `
+              <div class="menu-item">
+                <div>
+                  <div class="menu-item-name">${item.name}${item.tags.map(t => `<span class="tag">${t}</span>`).join("")}</div>
+                  <p class="menu-item-desc">${item.description}</p>
+                </div>
+                <div class="menu-item-price">$${item.price}</div>
+              </div>
+            `).join("")}
+          </div>
+        `;
+      }).join("");
+    } catch (err) {
+      el.innerHTML = `<p>Couldn't load the menu right now. Make sure the backend server is running at localhost:5000.</p>`;
+    }
+  })();
+</script>
+
+</body>
+</html>
